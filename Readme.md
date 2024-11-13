@@ -1,5 +1,7 @@
 # Chat Cliente-Servidor en Python
 
+![Descripción de la imagen](assets/images/chat_image.png)
+
 Este es un proyecto de chat en tiempo real utilizando sockets en Python, con una interfaz gráfica construida con Tkinter. Permite la comunicación entre múltiples clientes a través de un servidor central.
 
 ## Requisitos
