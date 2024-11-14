@@ -1,139 +1,126 @@
-# Laboratorio: Comunicación entre servidor y clientes en red local.
+# Laboratorio de Subneteo: Creando y Configurando Dos Subredes
 
-Este tutorial guiará a los estudiantes a configurar una red local entre una máquina servidor y varios clientes en Windows, permitiendo la comunicación a través de un puerto específico.
+![Laboratorio de Subneteo: Creando y Configurando Dos Subredes](./assets/ejercicio.png)
 
-## Objetivos:
+## Objetivo
 
-- Configurar una máquina servidor y varios clientes en una red local usando direcciones IP estáticas.
+- Comprender el concepto de subneteo y su aplicación práctica.
 
-- Verificar la comunicación entre las máquinas usando herramientas como ping y telnet.
+- Dividir una red en dos subredes más pequeñas.
 
-- Probar la comunicación usando una aplicación cliente-servidor simple.
+- Asignar direcciones IP a cada dispositivo en su subred correspondiente.
 
-- Resolver posibles problemas de red y firewall.
+- Configurar los dispositivos para que puedan comunicarse dentro de su subred.
 
-### 1. Preparación del entorno:
+## Materiales
 
-Antes de comenzar con la configuración, asegúrate de que tanto la máquina servidor como las máquinas cliente estén conectadas a la misma red local.
+- Computadoras con conexión a red
 
-### 2. Configuración de la máquina servidor (Windows)
+- Sistemas operativos con interfaz de línea de comandos (CLI) o herramientas de configuración de red
 
-**Asignar una IP estática**: La máquina servidor será el punto central de la comunicación. Para asignar una dirección IP estática:
+- Calculadora de IP (online o software)
 
-- Ve a Panel de Control > Centro de redes y recursos compartidos > Cambiar configuración del adaptador.
+- [Hoja de cálculo](https://docs.google.com/spreadsheets/d/1lITEdWuoTQFlLS_tshxjcl0ALTmroLawOj2jNHSHbtk/edit?usp=sharing)
 
-- Haz clic derecho sobre tu adaptador de red (por ejemplo, Ethernet) y selecciona Propiedades.
+## Procedimiento
 
-- Selecciona Protocolo de Internet versión 4 (TCP/IPv4) y haz clic en Propiedades.
+### División de la Red
 
-- Marca Usar la siguiente dirección IP y asigna una IP estática, por ejemplo:
+**Dirección de red inicial**: 192.168.1.0
 
-**IP**: 192.168.100.139
+**Máscara de subred original**: /24 (255.255.255.0)
 
-**Máscara de subred**: 255.255.255.0
+**Número de subredes**: 2
 
-**Puerta de enlace predeterminada (si es necesario)**: 192.168.100.1 (o la IP del enrutador si es necesario).
+**Número de hosts por subred**: 15
 
-**Configuración del firewall**: Asegúrate de que el firewall de Windows permite conexiones al puerto en el que se ejecutará el servidor. Por ejemplo, si tu servidor usa el puerto 12345:
+**Nueva máscara de subred**: /25 (255.255.255.128) - Esto nos permite dividir la red en dos partes iguales.
 
-- Abre el Panel de Control > Sistema y seguridad > Firewall de Windows.
+### Creación de la Hoja de Cálculo
 
-- Haz clic en Configuración avanzada a la izquierda.
+| Grupo    | Nombre del Estudiante | Dirección IP  | Máscara de Subred | Puerta de Enlace |
+| -------- | --------------------- | ------------- | ----------------- | ---------------- |
+| Subred 1 |                       | 192.168.1.1   | 255.255.255.128   |                  |
+|          |                       | 192.168.1.2   | 255.255.255.128   |                  |
+|          |                       | ...           | ...               | ...              |
+|          |                       | 192.168.1.126 | 255.255.255.128   |                  |
+| Subred 2 |                       | 192.18.1.128  | 255.255.255.128   |                  |
+|          |                       | 192.168.1.129 | 255.255.255.128   |                  |
+|          |                       | ...           | ...               | ...              |
+|          |                       | 192.168.1.254 | 255.255.255.128   |                  |
 
-- En el panel izquierdo, selecciona Reglas de entrada y haz clic en Nueva regla.
+## Asignación de Direcciones IP
 
-- Selecciona Puerto, luego elige TCP y coloca el puerto 12345.
+Cada estudiante elige un nombre y una dirección IP disponible de la subred correspondiente.
 
-- Permite la conexión y asigna un nombre a la regla, como "Puerto 12345".
+## Configuración de los Dispositivos
 
-- **Verificar la conexión**: Puedes verificar que el servidor esté escuchando en el puerto con el siguiente comando en la terminal:
+**Dirección IP**: Configurar la dirección IP asignada en la interfaz de red del dispositivo.
 
-```bash
-netstat -tuln | findstr 12345
-```
+**Máscara de subred**: Configurar la máscara de subred como 255.255.255.128.
 
-**Aplicación servidor**: Asegúrate de tener una aplicación simple en el servidor que escuche en el puerto configurado. Un ejemplo básico sería una aplicación Python con socket.
+**Puerta de enlace**: Si se utiliza un router, configurar la dirección IP del router como puerta de enlace predeterminada.
 
-### 3. Configuración de las máquinas cliente (Windows)
+## Verificación de la Conectividad
 
-Asignar una IP estática en las máquinas cliente: Similar al servidor, debes asignar una IP estática en las máquinas cliente para que estén en la misma red que el servidor.
+- **Ping**: Utilizar el comando ping para verificar si un dispositivo puede comunicarse con otro. Por ejemplo, ping 192.168.1.1 desde otro dispositivo en la misma subred.
 
-- Abre Panel de Control > Centro de redes y recursos compartidos > Cambiar configuración del adaptador.
+- **Comandos de red**: Utilizar comandos como ipconfig (Windows) o ifconfig (Linux) para verificar la configuración de la interfaz de red.
 
-- Haz clic derecho en el adaptador de red y selecciona Propiedades.
+## Explicación
 
-- Selecciona Protocolo de Internet versión 4 (TCP/IPv4) y haz clic en Propiedades.
+- **¿Por qué dividimos la red en dos?**
 
-- Marca Usar la siguiente dirección IP y asigna una IP estática dentro del mismo rango que el servidor, por ejemplo:
+**Dividir una red en subredes ofrece múltiples ventajas**:
 
-**IP del cliente**: 192.168.100.140 (o cualquier otra IP dentro de 192.168.100.2 a 192.168.100.254)
+**Mejor gestión**: Al segmentar la red, resulta más sencillo administrar los dispositivos y el tráfico de red.
 
-**Máscara de subred**: 255.255.255.0
+**Seguridad**: Las subredes ayudan a aislar diferentes áreas de la red, lo que dificulta la propagación de ataques y mejora la seguridad.
 
-**Puerta de enlace predeterminada**: 192.168.100.1 (si es necesario).
+**Eficiencia**: Permite asignar direcciones IP de manera más eficiente, evitando el desperdicio de direcciones.
 
-#### Verificar la conexión:
+**Escalabilidad**: Al agregar nuevas subredes, se puede expandir la red sin necesidad de modificar la configuración de toda la red.
 
-Abre Símbolo del sistema (cmd) y ejecuta:
+**Performance**: Las subredes pueden mejorar el rendimiento de la red al reducir el tráfico en cada segmento.
 
-```bash
-ping 192.168.100.139
-```
+- **¿Qué significa la máscara de subred 255.255.255.128?**
 
-Si la máquina cliente recibe respuestas del servidor, la comunicación básica está funcionando.
+La máscara de subred es una secuencia de bits que determina qué parte de una dirección IP se utiliza para identificar la red y qué parte se utiliza para identificar el host. En el caso de 255.255.255.128:
 
-#### Probar la conectividad al puerto del servidor:
+**255.255.255**: Indica que los primeros 24 bits de la dirección IP se utilizan para identificar la red.
 
-- Instala Telnet si aún no está disponible:
+**128**: Indica que el siguiente bit se utiliza para identificar la subred.
 
-- Abre el Panel de Control > Programas > Activar o desactivar características de Windows.
+**0**: Los últimos 7 bits se utilizan para identificar el host.
 
-- Marca Cliente Telnet y haz clic en Aceptar.
+En términos más simples, esta máscara divide la red original en dos subredes iguales.
 
-- Desde el cliente, abre Símbolo del sistema y ejecuta:
+**Representación binaria**:
 
-```bash
-telnet 192.168.100.139 12345
-```
+11111111.11111111.11111111.10000000
 
-Si la conexión es exitosa, el servidor está disponible en ese puerto.
+- **¿Cuál es la importancia de la puerta de enlace?**
 
-### 4. Resolución de problemas comunes
+La puerta de enlace (también conocida como router) es un dispositivo de red que conecta diferentes redes. Su función principal es:
 
-**Problema 1**: No se puede hacer ping entre las máquinas
+**Enrutamiento**: Determina la mejor ruta para enviar paquetes de datos entre diferentes redes.
 
-- Verifica que las IPs configuradas están en el mismo rango de red.
+**Conectividad**: Permite que los dispositivos en una subred se comuniquen con dispositivos en otras subredes.
 
-- Asegúrate de que el firewall no está bloqueando las solicitudes de ping.
+**Traducción de direcciones de red (NAT)**: En muchas redes domésticas y pequeñas empresas, el router también actúa como un servidor NAT, permitiendo que múltiples dispositivos compartan una única dirección IP pública.
 
-- Si estás utilizando un software de seguridad adicional, verifica que no esté bloqueando la comunicación en la red local.
+**Ejemplo**:
 
-**Problema 2**: El puerto no está accesible (telnet o nc no conecta)
+Si un dispositivo en la subred 192.168.1.0/25 quiere comunicarse con un dispositivo en Internet, el paquete de datos se envía primero al router (puerta de enlace). El router, al conocer la dirección IP de destino, determina la mejor ruta para enviar el paquete a Internet.
 
-- Asegúrate de que el servidor está escuchando en el puerto correcto y que el firewall de Windows en el servidor está configurado para permitir conexiones al puerto.
+## Conceptos Adicionales
 
-- Revisa que la máquina cliente pueda acceder al puerto del servidor sin restricciones.
+**Dirección de red**: La primera dirección IP disponible en una subred.
 
-**Problema 3**: Dirección IP de cliente fuera de rango
+**Dirección de broadcast**: La última dirección IP disponible en una subred.
 
-- Asegúrate de que la IP asignada en el cliente esté dentro del mismo rango de red que el servidor (192.168.100.x).
+**Rango de direcciones**: El conjunto de direcciones IP utilizables dentro de una subred.
 
-- Verifica que la máscara de subred sea 255.255.255.0 en todas las máquinas.
+**VLSM (Variable Length Subnet Mask)**: Permite asignar diferentes tamaños de subred a diferentes partes de una red, lo que optimiza el uso de las direcciones IP.
 
-### 5. Resumen de la configuración
-
-- Componente Dirección IP Máscara de Subred Puerta de Enlace
-
-**Servidor** 192.168.100.139 255.255.255.0 192.168.100.1
-
-**Cliente 1** 192.168.100.140 255.255.255.0 192.168.100.1
-
-**Cliente 2** 192.168.100.141 255.255.255.0 192.168.100.1
-
-### 6. Verificación final
-
-- Verifica que todos los clientes pueden hacer ping al servidor.
-
-- Verifica que el servidor está escuchando en el puerto adecuado.
-
-- Verifica que los clientes pueden conectarse al puerto del servidor con telnet o nc.
+**CIDR (Classless Inter-Domain Routing)**: Un método de direccionamiento IP que reemplazó el sistema de clases de direcciones IP.
